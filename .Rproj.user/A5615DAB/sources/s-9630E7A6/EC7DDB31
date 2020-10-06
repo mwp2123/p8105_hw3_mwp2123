@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1601995364940.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EC7DDB31",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1601995364940,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E5F95EAA",
+        "caption" : "instacart",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=instacart&cache_key=E5F95EAA",
+        "displayedObservations" : "1384617",
+        "environment" : "",
+        "expression" : "instacart",
+        "object" : "instacart",
+        "preview" : "0",
+        "totalObservations" : "1384617",
+        "variables" : "15"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

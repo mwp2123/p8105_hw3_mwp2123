@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1601994321424.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3566880651",
+    "id" : "EC8D6A66",
+    "lastKnownWriteTime" : 1601996557,
+    "last_content_update" : 1601996557061,
+    "path" : "~/Library/Mobile Documents/com~apple~CloudDocs/MS Biostatistics/Fall 2020/Data Science I/p8105_hw3_mwp2123/p8105_hw3_mwp2123.Rmd",
+    "project_path" : "p8105_hw3_mwp2123.Rmd",
+    "properties" : {
+        "cursorPosition" : "92,0",
+        "scrollLine" : "73",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
