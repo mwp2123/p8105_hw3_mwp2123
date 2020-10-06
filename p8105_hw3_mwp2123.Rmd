@@ -90,3 +90,11 @@ instacart %>%
   )
 ```
 
+##Problem 2
+
+```{r}
+accel_df =
+  read_csv("./data/accel_data.csv") %>% 
+  janitor::clean_names()
+```
+
