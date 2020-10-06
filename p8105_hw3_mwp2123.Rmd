@@ -95,6 +95,19 @@ instacart %>%
 ```{r}
 accel_df =
   read_csv("./data/accel_data.csv") %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  pivot_longer(
+    activity_1:activity_1440,
+    names_to = "activity_number",
+    names_prefix = "activity_",
+    values_to = "activity_count"
+  )
+```
+
+##Problem 3
+
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
 ```
 
