@@ -32,62 +32,64 @@ scale_fill_discrete = scale_fill_viridis_d
 
 ```{r}
 library(p8105.datasets)
+
 data("instacart")
 ```
 
-This dataset contains `r nrow(instacart)` rows and... columns.
+This dataset contains `r nrow(instacart)` rows and `r ncol(instacart)` columns. 
 
-Observations are the level of items in orders by user. There are user/order variables -- user ID, order ID, order day, and order hour. There are also item variables -- name, aisle, department, and some numeric codes.
+Observations are the level of items in orders by user. There are user / order variables -- user ID, order ID, order day, and order hour. There are also item variables -- name, aisle, department, and some numeric codes. 
 
 How many aisles, and which are most items from?
 
 ```{r}
 instacart %>% 
-  count(aisle) %>% 
-  arrange(desc(n))
+	count(aisle) %>% 
+	arrange(desc(n))
 ```
+
 
 Let's make a plot
 
 ```{r}
 instacart %>% 
-  count(aisle) %>% 
-  filter(n > 10000) %>% 
-  mutate(
-    aisle = factor(aisle),
-    aisle = fct_reorder(aisle,n)
-  ) %>% 
-  ggplot(aes(x=aisle, y=n)) +
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+	count(aisle) %>% 
+	filter(n > 10000) %>% 
+	mutate(
+		aisle = factor(aisle),
+		aisle = fct_reorder(aisle, n)
+	) %>% 
+	ggplot(aes(x = aisle, y = n)) + 
+	geom_point() + 
+	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-Let's make a table!
+
+Let's make a table!!
 
 ```{r}
 instacart %>% 
-  filter( aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) %>% 
-  group_by(aisle) %>%
-  count(product_name) %>% 
-  mutate(
-    rank=min_rank(desc(n))
-  ) %>% 
-  filter(rank < 4) %>% 
-  arrange(desc(n)) %>% 
-  knitr::kable()
+	filter(aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) %>% 
+	group_by(aisle) %>% 
+	count(product_name) %>% 
+	mutate(rank = min_rank(desc(n))) %>% 
+	filter(rank < 4) %>% 
+	arrange(aisle, rank) %>% 
+	knitr::kable()
 ```
 
-Apples vs ice cream...
+
+Apples vs ice cream..
 
 ```{r}
 instacart %>% 
-  filter(product_name %in% c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
-  group_by(product_name) %>% 
-  summarize(mean_hour = mean(order_hour_of_day)) %>% 
-  pivot_wide(
-    names_from = order_dow,
-    values_from = mean_hour
-  )
+	filter(product_name %in% c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
+	group_by(product_name, order_dow) %>% 
+	summarize(mean_hour = mean(order_hour_of_day)) %>% 
+	pivot_wider(
+		names_from = order_dow,
+		values_from = mean_hour
+	)
 ```
 
 ##Problem 2
@@ -98,11 +100,50 @@ accel_df =
   janitor::clean_names() %>% 
   pivot_longer(
     activity_1:activity_1440,
-    names_to = "activity_number",
+    names_to = "minute",
     names_prefix = "activity_",
     values_to = "activity_count"
+  ) %>% 
+  mutate(
+    day_type = case_when(
+      day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday') ~ "weekday",
+      day %in% c('Saturday','Sunday') ~ "weekend"
+    ),
+    day_type = factor(day_type),
+    minute = as.numeric(minute),
+    day = factor(day, levels=c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday','Sunday')),
+		day = forcats::fct_relevel(day)
   )
 ```
+
+This dataset contains `r nrow(accel_df)` rows and `r ncol(accel_df)` columns. 
+
+This dataset is 5 weeks of accelerometer data for a 63 year old male with BMI 25 who is admitted and diagnosed with congestive heart failure (CHF). After the dataset is tidied, you can see the amount of activity per minute of the day and see additional variables around day of the week, etc.  
+
+```{r}
+summary_accel =
+accel_df %>% 
+  group_by(day_id, day, day_type) %>% 
+  summarise(total_activity= sum(activity_count))
+
+knitr::kable(summary_accel)
+  
+ggplot(summary_accel, aes(x=day_id, y=total_activity,color=day_type)) + geom_point()
+```
+
+It looks like the patient has barely any activity on weekends. 
+
+```{r}
+accel_df %>% 
+  ggplot(aes(x=minute,y=activity_count,color=day)) + 
+    geom_line() +
+    facet_grid(week ~day)
+
+
+```
+
+
+It looks like the patient was not that active in the beginning but became more active over time. However, it looks like towards the end of the 35 day period he started to become less active again. For the middle of the 35 day period that he was active, it looks like he was active towards the end of the day.
 
 ##Problem 3
 
