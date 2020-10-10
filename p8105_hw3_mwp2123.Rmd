@@ -226,10 +226,31 @@ plot_jan + plot_july
 
 The two plots show that it's much hotter in July than it is in January. 
 
-Make a two panel plot showing (i) tmax vs tmin 
+Make a two panel plot showing :
 
+(i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option)
 ```{r}
+tmin_plot =
+ny_noaa_df %>% 
+  ggplot(aes(y=tmin)) +
+  geom_boxplot()
+
+tmax_plot =
+ny_noaa_df %>% 
+  ggplot(aes(y=tmax)) +
+  geom_boxplot()
+
+tmin_plot + tmax_plot
 
 ```
 
+There are some values that don't make sense in this dataset - temperature values above 99 C and below -33 don't appear in the original dataset but appear in the tidied dataset.
 
+(ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year
+```{r}
+
+ny_noaa_df %>% 
+  filter(snow > 0 & snow < 100) %>% 
+  ggplot(aes(x=year, y=snow, group=year, color=year)) +
+    geom_boxplot()
+```
