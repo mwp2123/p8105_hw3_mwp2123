@@ -28,6 +28,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+### Problem 1
 ##Load data
 
 ```{r}
@@ -92,7 +93,7 @@ instacart %>%
 	)
 ```
 
-##Problem 2
+### Problem 2
 
 ```{r}
 accel_df =
@@ -145,10 +146,90 @@ accel_df %>%
 
 It looks like the patient was not that active in the beginning but became more active over time. However, it looks like towards the end of the 35 day period he started to become less active again. For the middle of the 35 day period that he was active, it looks like he was active towards the end of the day.
 
-##Problem 3
+### Problem 3
 
 ```{r}
 library(p8105.datasets)
 data("ny_noaa")
+
 ```
+
+## Clean and tidy data
+```{r}
+ny_noaa_df =
+ny_noaa %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    date = as.character(date)
+  ) %>% 
+  separate(date, into = c("year", "month", "day"), sep="-",convert = TRUE) %>% 
+  drop_na(tmax)  %>% 
+  mutate(
+    tmax = as.numeric(as.character(tmax)),
+    tmin = as.numeric(as.character(tmin))
+  )
+
+```
+
+## Find the most common value for snowfall
+
+```{r}
+getmode <- function(v) {
+    uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+ }
+
+getmode(ny_noaa_df$snow)
+```
+
+The most common value for snowfall was `r getmode(ny_noaa_df$snow)` mm. This is so because it only snows for a few months in NYC a year.
+
+```{r}
+ny_noaa_df_jan =
+ny_noaa_df %>% 
+filter(month == 1) %>%
+group_by(id, year) %>%
+summarize(mean_tmax = mean(tmax, na.rm = TRUE))
+
+plot_jan=
+ggplot(ny_noaa_df_jan,aes(x = year, y = mean_tmax, group = id, color = id)) + 
+  geom_point() + 
+  geom_path() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Temperature plot for January",
+    x = "Year",
+    y = "Mean Maxiumum temperature (C)",
+    caption = "Data from the nyoaa package"
+  )
+
+ny_noaa_df_july =
+ny_noaa_df %>% 
+filter(month == 7) %>%
+group_by(id, year) %>%
+summarize(mean_tmax = mean(tmax, na.rm = TRUE))
+
+plot_july=
+ggplot(ny_noaa_df_july,aes(x = year, y = mean_tmax, group = id, color = id)) + 
+  geom_point() + 
+  geom_path() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Temperature plot for July",
+    x = "Year",
+    y = "Mean Maxiumum temperature (C)",
+    caption = "Data from the nyoaa package"
+  )
+  
+plot_jan + plot_july
+```
+
+The two plots show that it's much hotter in July than it is in January. 
+
+Make a two panel plot showing (i) tmax vs tmin 
+
+```{r}
+
+```
+
 
